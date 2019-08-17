@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Dashboard_model extends CI_Model {
 
-	public function M_guardarHito($mensaje,$lugar,$lat,$lon){
+	public function M_guardarHito($mensaje,$lugar,$lat,$lon,$medio){
 
 		$data = array(
 			        'id_delegacion' => $this->session->userdata('id_delegacion'),
@@ -12,7 +12,8 @@ class Dashboard_model extends CI_Model {
 			        'latitud' => $lat,
 			        'longitud' => $lon,
 			        'mensaje' =>$mensaje,
-			        'fecha' =>date("Y-m-d H:i:s")
+			        'fecha' =>date("Y-m-d H:i:s"),
+					'medio_transporte' =>$medio
 					);
 
 		$this->db->insert('hitos', $data);
@@ -27,6 +28,7 @@ class Dashboard_model extends CI_Model {
 	public function M_obtenerHitos($id_delegacion = 0){
 		$this->db->order_by('fecha', 'DESC');
 		$this->db->join('delegaciones d', 'd.id_delegacion = h.id_delegacion');
+		$this->db->join('medio_transporte e', 'e.id_medio_transporte = h.medio_transporte');
 		if($id_delegacion != 0){
 			$query = $this->db->get_where('hitos h', array('h.id_delegacion' => $id_delegacion));
 		}else{
@@ -56,6 +58,13 @@ class Dashboard_model extends CI_Model {
 	public function M_obtenerDelegaciones(){
 		$this->db->order_by('nombre','ASC');
 		$query = $this->db->get('delegaciones');
+
+		return $query->result();
+	}
+	
+	public function M_obtenerMediosTransporte(){
+		$this->db->order_by('nombre','ASC');
+		$query = $this->db->get('medio_transporte');
 
 		return $query->result();
 	}

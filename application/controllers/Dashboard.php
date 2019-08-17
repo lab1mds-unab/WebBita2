@@ -68,6 +68,14 @@ class Dashboard extends CI_Controller {
 		foreach ($delegaciones as $fila) {
 			$data['selectDelegaciones'] .= "<option value=".$fila->id_delegacion.">".$fila->nombre."</option>";
 		}
+		
+		// Obtener Medios de Transportes
+		$mediosTrans = $this->Dashboard_model->M_obtenerMediosTransporte();
+		$data['selectMedioTranporte'] = "";
+		foreach ($mediosTrans as $fila) {
+			$data['selectMedioTranporte'] .= "<option value=".$fila->id_medio_transporte.">".$fila->nombre."</option>";
+		}
+
 
 
 		$this->load->view('template/header',$data);
@@ -469,13 +477,14 @@ public function C_obtenerHistorialEstados($output = 0){
 		$lugar = $this->input->post("lugar");
 		$lat = $this->input->post("latitud");
 		$lon = $this->input->post("longitud");
+		$medio = $this->input->post("medios_trans");
 
-		$resp = $this->Dashboard_model->M_guardarHito($mensaje,$lugar,$lat,$lon);
+		$resp = $this->Dashboard_model->M_guardarHito($mensaje,$lugar,$lat,$lon,$medio);
 
 		if($resp == 0){
 			echo "ERROR";
 		}else{
-			$this->send_mail($mensaje,$lat,$lon);
+			//$this->send_mail($mensaje,$lat,$lon);
 			echo $this->C_obtenerHitos();
 
 		}
@@ -497,6 +506,7 @@ public function C_obtenerHistorialEstados($output = 0){
 					        <div class="card card-outline-info">
 					            <div class="card-title">
 					                <h4>'.$fila->nombre.'</h4>
+									<h4> - Medio de Transporte: '.$fila->nombre.' - </h4>
 					                <small>'.$fila->fecha.'  - '.$fila->lugar.' '.$mapaAPI.'</small>
 					            </div>
 					            <div class="card-body m-t-15">

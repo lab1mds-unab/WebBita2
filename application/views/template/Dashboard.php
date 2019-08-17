@@ -32,6 +32,15 @@
                                                 <input type="text" name="lugar" class="form-control" placeholder="¿Dónde estás?" required>
                                             </div>
                                         </div>
+										<div class="form-group row">
+                                            <label class="control-label col-md-2">Medio de Transporte</label>
+											<div class="col-md-10">
+												<select id="medios_trans" class="form-control">
+														<option value="0">-- Seleccione --</option>
+														<?php if(isset($selectMedioTranporte)){echo $selectMedioTranporte;} ?>
+												</select>
+											</div>
+                                        </div>
                                         <div class="form-group row">
                                             <label class="control-label col-md-2">Mensaje</label>
                                             <div class="col-md-10">
@@ -100,7 +109,8 @@
             	
             	$("#S_Delegaciones").on("change",function(){
             		var id_delegacion = $("#S_Delegaciones").val();
-            		
+					
+          		
 
 
 		        	// inicio AJAX
@@ -137,22 +147,23 @@
 				$('#enviarMensaje').on('click',function(){
 					var lugar = $("input[name='lugar']").val();
 					var mensaje = $("textarea[name='mensaje']").val();
+					var medios_trans = $("#medios_trans").val();				
+    		
 					
-					actualizarHitos(lugar,mensaje);
+					actualizarHitos(lugar,mensaje,medios_trans);
 				});
 
-		        function actualizarHitos(lugar,mensaje){
+		        function actualizarHitos(lugar,mensaje,medios_trans){
 
 		            $("#Hitos").html(""); 
 		            navigator.geolocation.getCurrentPosition(showPosition,showError);
 		            var lat = $("input[name='latitud']").val();
 				  	var lon = $("input[name='longitud']").val();
-		           
 		            // inicio AJAX
 		            $.ajax({
 		                url: "<?php echo base_url('index.php/Dashboard/C_guardarHito/'); ?>",
 		                type: "post",
-		                data: { lugar:lugar,mensaje:mensaje,latitud:lat,longitud:lon},
+		                data: { lugar:lugar,mensaje:mensaje,latitud:lat,longitud:lon,medios_trans:medios_trans},
 		                beforeSend:function(){
 		                    $("#Hitos").html('<div class="row">\
 											    <div class="col-lg-1"></div>\
