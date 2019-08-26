@@ -45,7 +45,7 @@ class Dashboard extends CI_Controller {
 				$usuario = "<b>".$usuario."</b>";
 			}
 			if(!in_array($remitente, $arrayRemitentes)){
-				$cuadroMensaje .='<a href="'.base_url("Dashboard/inbox/".$remitente).'">
+				$cuadroMensaje .='<a href="'.base_url("index.php/Dashboard/inbox/".$remitente).'">
 	                            	<div class="mail-contnet">
 	                                	<h5>'.$usuario.'</h5> <span class="mail-desc">'.$fila->Mensaje.'</span> <span class="time">'.date("H:i",strtotime($fila->Fecha)).'</span>
 	                            	</div>
@@ -220,7 +220,7 @@ class Dashboard extends CI_Controller {
 			$data["para"] = $id_usuario_para;
 			foreach ($mensajes as $fila) {
 				if ($this->session->userdata('id_usuario') == $fila->id_usuario_de) {
-					$data["msgBox"] .="<div class='box3 sb13'>".$fila->mensaje."</div>";
+					$data["msgBox"] .="<div class='box3 sb13'> ".$fila->mensaje."</div>";
 				}else{
 					$data["msgBox"] .="<div class='box4 sb14'><p>".$fila->mensaje."</p></div>";
 				}
@@ -365,10 +365,13 @@ class Dashboard extends CI_Controller {
 		// Itinerario e información se van a la tabla DELEGACIONES
 		$itinerario = $this->input->post("itinerario");
 		$infoExtra = $this->input->post("infoExtra");
-		$resp_delaciones = $this->Dashboard_model->M_ActualizarInfoDelegacion($itinerario,$infoExtra);
+		$idEstado = $this->input->post("id_estado");
+		//$estado = $this->input->post("id_estado");
+		$resp_delaciones = $this->Dashboard_model->M_ActualizarInfoDelegacion($itinerario,$infoExtra,$idEstado);
 
 		if ($resp_delaciones == 0) {
 			//echo "Hubo un problema con la actualizacion de informacion";
+			
 		}
 
 		// id_estado se va a la tabla HISTORIAL_ESTADO

@@ -40,7 +40,7 @@ class Dashboard_model extends CI_Model {
 	}
 	public function M_obtenerHistorialEstado(){
 		$this->db->order_by('fecha_modificacion', 'DESC');
-		$this->db->join('estados_viaje e', 'e.id_estados_viaje = h.id_estados_viaje');
+		$this->db->join('estados_viaje e', 'e.id_estados_viaje = h.id_estados_viajes');
 		$query = $this->db->get_where('historial_estado h', array('id_delegacion' => $this->session->userdata('id_delegacion')));
 
 		return $query->result();
@@ -149,9 +149,10 @@ class Dashboard_model extends CI_Model {
 
 	public function M_ActualizarAgregarEstadoViaje($id_estado_viaje){
 		$data = array(
-			        'id_delegacion' => $this->session->userdata('id_delegacion'),
-			        'id_estados_viaje' => $id_estado_viaje, //nombre de usuario
-			        'fecha_modificacion' => date("Y-m-d H:i:s")
+					//'id_estados_viaje' => "5",
+			        'id_delegacion' => $this->session->userdata('id_delegacion'),			        
+			        'fecha_modificacion' => date("Y-m-d H:i:s"),
+					'id_estados_viajes' => $id_estado_viaje, //nombre de usuario
 					);
 
 		$this->db->insert('historial_estado', $data);

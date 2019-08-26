@@ -47,19 +47,19 @@ if (!$this->session->userdata('usuario')) {
                 <div class="navbar-header">
                     <a class="navbar-brand" href="<?php echo base_url('index.php/'); ?>">
                         <!-- Logo icon -->
-                        <b>Viajes UNAB</b>
+                        <b>Viajes UNAB</b> 
                         <img src="<?php echo base_url('assets/images/logo-campori.png');?>" alt="">
                         <!--End Logo icon -->
                         <!-- Logo text -->
                         <span></span>
                     </a>
-                </div>
+				</div>
                 <!-- End Logo -->
                 <div class="navbar-collapse">
                     <!-- toggle and nav items -->
                     <ul class="navbar-nav mr-auto mt-md-0">
                         <!-- This is  -->
-                        <h4></h4>
+                        <h4>Bienvenido: <?php echo $this->session->userdata('nombre_completo') ?></h4>
                         
                        
                     </ul>
@@ -82,7 +82,7 @@ if (!$this->session->userdata('usuario')) {
                                         <div class="drop-title">Tienes <?php echo $mensajesNuevos; ?> mensajes nuevos</div>
                                     </li>
                                     <li>
-                                        <div class="message-center">
+                                        <div class="message-center" >
                                             <?php 
                                                 if ($mensajes != "") {
                                                     echo $mensajes;

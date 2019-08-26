@@ -33,7 +33,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">RUT</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="rut" class="form-control" placeholder="11111111-1" required>
+                                                <input type="text" id = "rut" name="rut" class="form-control" placeholder="11111111-1" required> 
                                             </div>
                                         </div>
 
@@ -115,7 +115,6 @@
 
 			<script src="<?php echo base_url('assets/js/lib/jquery/jquery.min.js');?>"></script>
             <script type="text/javascript">
-
 
 				$('#registrarAsistente').on('click',function(){
 

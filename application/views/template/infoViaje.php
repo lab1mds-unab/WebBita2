@@ -26,7 +26,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Estado del viaje</label>
                                             <div class="col-md-9">
-                                                <select name="estado" class="form-control">
+                                                <select id = "estados" name="estado" class="form-control">
                                                     <?php echo $select_estados; ?>
                                                 </select>
                                             </div>
@@ -110,7 +110,8 @@
 		                type: "post",
 		                data: { itinerario:$("textarea[name='itinerario']").val(),
                                 infoExtra: $("textarea[name='infoExtra']").val(),
-                                id_estado: $("select[name='estado']").val()},
+								id_estado: $("#estados").val(),
+                                },
 		                beforeSend:function(){
 		                    $("#cuerpo").html('<div class="row">\
 											    <div class="col-lg-1"></div>\
