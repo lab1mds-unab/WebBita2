@@ -33,14 +33,14 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">RUT</label>
                                             <div class="col-md-9">
-                                                <input type="text" id = "rut" name="rut" class="form-control" placeholder="11111111-1" required> 
+                                                <input type="text" name="rut" class="form-control" placeholder="11111111-1" required>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Edad</label>
                                             <div class="col-md-9">
-                                                <input type="number" min="10" name="edad" class="form-control" required>
+                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="Ingresar entre 0 y 99 años" required>
                                             </div>
                                         </div>
 
@@ -53,8 +53,8 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Teléfono</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="fono" class="form-control" placeholder="+56 9 1234 5678" required>
-                                            </div>
+                                                <input name="fono" type="number" class="form-control" onKeyUp="return limitar(event,this.value,11)" onKeyDown="return limitar(event,this.value,11)" placeholder="56966454801" required>
+											</div>
                                         </div>
                                         
                                         
@@ -111,10 +111,37 @@
                 </div>
 
 				
-				
+			<script>
+				// Funcion para limitar el numero de caracteres de un textarea o input
+				// Tiene que recibir el evento, valor y número máximo de caracteres
+				function limitar(e, contenido, caracteres)
+				{
+					// obtenemos la tecla pulsada
+					var unicode=e.keyCode? e.keyCode : e.charCode;
+ 
+					// Permitimos las siguientes teclas:
+					// 8 backspace
+					// 46 suprimir
+					// 13 enter
+					// 9 tabulador
+					// 37 izquierda
+					// 39 derecha
+					// 38 subir
+					// 40 bajar
+					if(unicode==8 || unicode==46 || unicode==13 || unicode==9 || unicode==37 || unicode==39 || unicode==38 || unicode==40)
+						return true;
+ 
+					// Si ha superado el limite de caracteres devolvemos false
+					if(contenido.length>=caracteres)
+						return false;
+ 
+					return true;
+				}
+			</script>	
 
 			<script src="<?php echo base_url('assets/js/lib/jquery/jquery.min.js');?>"></script>
             <script type="text/javascript">
+
 
 				$('#registrarAsistente').on('click',function(){
 
