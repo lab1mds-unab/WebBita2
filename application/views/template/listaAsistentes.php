@@ -26,14 +26,14 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Nombre Completo</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="nombreCompleto" class="form-control" placeholder="Nombre completo" required>
+                                                <input name="nombreCompleto" type="text" maxlength=50 id="nombre" class="form-control" placeholder="Nombre completo" required onkeypress="return soloLetras(event)">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">RUT</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="rut" class="form-control" placeholder="11111111-1" required>
+                                                <input name="rut" type="text" maxlength=10 id = "rut" class="form-control" placeholder="11111111-K" onkeypress="return soloRUT(event)" onblur=Valida_Rut(this) required>
                                             </div>
                                         </div>
 
@@ -47,7 +47,7 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Club</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="club" class="form-control" placeholder="Nombre del club" required>
+                                                <input name="club" type="text" maxlength=40 id = "club" class="form-control" placeholder="Nombre del club" required onkeypress="return soloLetras(event)">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -138,6 +138,116 @@
 					return true;
 				}
 			</script>	
+			
+			<script>
+			// Funcion que se encarga de validar el rut, de acuerdo al calculo realizado con su parte entera y el digito verificador, del mismo modo, tambien // verifica que los ingresado sean numeros acordes al calculo del RUT, una vez pierda el focus del campo de texto.
+				function Valida_Rut(rut)
+				{
+					var tmpstr = "";
+					var intlargo = rut.value;
+					if (intlargo.length> 0)
+
+					{
+						crut = rut.value;
+						largo = crut.length;
+						if ( largo <2 )
+						{
+							alert('rut invÃ¡lido');
+							 $('#rut').val('');
+							return false;
+						}
+						for ( i=0; i <crut.length ; i++ )
+    						if ( crut.charAt(i) != ' ' && crut.charAt(i) != '.' && crut.charAt(i) != '-' )
+    						{
+    							tmpstr = tmpstr + crut.charAt(i);
+    						}
+    						rut = tmpstr;
+    						crut=tmpstr;
+    						largo = crut.length;
+
+						if ( largo> 2 )
+							rut = crut.substring(0, largo - 1);
+						else
+							rut = crut.charAt(0);
+						dv = crut.charAt(largo-1);
+
+						if ( rut == null || dv == null )
+						return 0;
+						var dvr = '0';
+						suma = 0;
+						mul  = 2;
+
+						for (i= rut.length-1 ; i>= 0; i--)
+						{
+							suma = suma + rut.charAt(i) * mul;
+							if (mul == 7)
+								mul = 2;
+							else
+								mul++;
+						}
+
+						res = suma % 11;
+						if (res==1)
+							dvr = 'k';
+						else if (res==0)
+							dvr = '0';
+						else
+						{
+							dvi = 11-res;
+							dvr = dvi + "";
+						}
+
+						if ( dvr != dv.toLowerCase() )
+						{
+							alert('El Rut Ingreso es Invalido!\nPor favor, ingresar numeros y digito verificador en la forma sugerida');
+							$('#rut').val('');
+							return false;
+						}
+						alert('El Rut Ingresado es Correcto!');
+						$('#rut').focus();
+						return true;
+					}
+				}
+
+		// Funcion que valida que el ingreso al campo sea de solo caracteres del tipo letras		
+        function soloLetras(e) {
+            key = e.keyCode || e.which;
+            tecla = String.fromCharCode(key).toLowerCase();
+            letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+            especiales = [8, 37, 39, 46];
+
+            tecla_especial = false
+            for(var i in especiales) {
+                if(key == especiales[i]) {
+                    tecla_especial = true;
+                    break; 
+                }
+            }
+
+            if(letras.indexOf(tecla) == -1 && !tecla_especial)
+                return false;
+        }
+
+        // Funcion que solo permite numeros dentro de los textfields especificados para usar la funcion
+		function soloRUT(e) {
+            key = e.keyCode || e.which;
+            tecla = String.fromCharCode(key).toLowerCase();
+            numeros = "0123456789-K";
+            especiales = [8, 37, 39, 46];
+
+            tecla_especial = false
+            for(var i in especiales) {
+                if(key == especiales[i]) {
+                    tecla_especial = true;
+                    break; 
+                }
+            }
+
+            if(numeros.indexOf(tecla) == -1 && !tecla_especial)
+                return false;
+        }
+			
+			</script>
 
 			<script src="<?php echo base_url('assets/js/lib/jquery/jquery.min.js');?>"></script>
             <script type="text/javascript">
