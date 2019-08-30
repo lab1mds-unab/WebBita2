@@ -341,7 +341,8 @@ class Dashboard extends CI_Controller {
 
 		$resp = $this->Dashboard_model->M_guardarAsistente($datosAsistentes);
 
-		if($resp == 0){
+		$validarRut = $this->validaRut($datosAsistentes["rut"]);
+		if($resp == 0 && $validaRut == False){
 			echo "ERROR";
 		}else{
 			echo $this->C_obtenerAsistentes(1);
@@ -534,8 +535,35 @@ public function C_obtenerHistorialEstados($output = 0){
 			echo $this->C_obtenerAsistentes(1);
 		}
 	}
-
-
+	
+	public function validaRut($rut){
+	    if(strpos($rut,"-") == false){
+	        $RUT[0] = substr($rut, 0, -1);
+	        $RUT[1] = substr($rut, -1);
+	    }else{
+	        $RUT = explode("-", trim($rut));
+	    }
+        $auxRut = str_replace(".","",trim($RUT[0]));
+        $factor = 2;
+        for($i=strlen($auxRut)-1;$i>=0;$i--):
+            $factor = $factor > 7 ? 2 : $factor;
+            $suma += $auxRut($i)*$factor++;
+        endfor;
+        $resto = $suma % 11;
+        $dv = 11 - $resto;
+        if($dv == 11){
+            $dv=0;
+        }else if($dv == 10){
+            $dv="k";
+        }else{
+            $dv=$dv;
+        }
+        if($dv == trim(strtolower($RUT[1]))){
+            return true;
+        }else {
+            return false;
+        } 
+	}
 
 }
 
