@@ -3,7 +3,7 @@
             <!-- Bread crumb -->
             <div class="row page-titles">
                 <div class="col-md-5 align-self-center">
-                    <h3 style="color:#ffffff;">Lista de asistentes</h3> </div>
+                    <h3 style="color:#ffffff;">Ingresar Nuevo Usuario</h3> </div>
             </div>
             <!-- End Bread crumb -->
             <!-- Container fluid  -->
@@ -18,22 +18,24 @@
                         <div class="card card-outline-info">
                             
                             <div class="card-body m-t-15">
-                            	<legend>Asistentes</legend>
+                            	<legend>Nuevo Usuario</legend>
                                 <form action="#" class="form-horizontal form-bordered">
                                     <div class="form-body">                                      
                                         
-                                        
+                                        <div class="form-group row">
+                                            <label class="control-label col-md-3">Seleccionar perfil usuario</label>
+                                            <div class="col-md-9">
+                                                <select id = "estados" name="estado" class="form-control">
+                                                    <?php echo $select_estados; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+										
+										
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Nombre Completo</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="nombreCompleto" class="form-control" placeholder="Nombre completo" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="control-label col-md-3">RUT</label>
-                                            <div class="col-md-9">
-                                                <input type="text" name="rut" class="form-control" placeholder="11111111-1" required>
+                                                <input name="nombreCompleto" type="text" maxlength=50 id="nombre" class="form-control" placeholder="Nombre completo (Pedro Soto González)" required onkeypress="return soloLetras(event)">
                                             </div>
                                         </div>
 
@@ -43,28 +45,35 @@
                                                 <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="Ingresar entre 0 y 99 años" required>
                                             </div>
                                         </div>
-
-                                        <div class="form-group row">
-                                            <label class="control-label col-md-3">Club</label>
+										
+										<div class="form-group row">
+                                            <label class="control-label col-md-3">Correo</label>
                                             <div class="col-md-9">
-                                                <input type="text" name="club" class="form-control" placeholder="Nombre del club" required>
+                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="example@example.com" required>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
-                                            <label class="control-label col-md-3">Teléfono</label>
+										
+										<div class="form-group row">
+                                            <label class="control-label col-md-3">Nombre Usuario</label>
                                             <div class="col-md-9">
-                                                <input name="fono" type="number" class="form-control" onKeyUp="return limitar(event,this.value,11)" onKeyDown="return limitar(event,this.value,11)" placeholder="56966454801" required>
-											</div>
+                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="Alias (Peterlanguilla)" required>
+                                            </div>
                                         </div>
-                                        
-                                        
+										
+										<div class="form-group row">
+                                            <label class="control-label col-md-3">Contraseña</label>
+                                            <div class="col-md-9">
+                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="*************" required>
+                                            </div>
+                                        </div>
+										
                                     </div>
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="row">
                                                     <div class="offset-sm-2 col-md-9">
-                                                        <button type="button" id="registrarAsistente" class="btn btn-primary"> <i class="fa fa-check"></i> Registrar Asistente</button>
+                                                        <button type="button" id="registrarAsistente" class="btn btn-primary"> <i class="fa fa-check"></i> Crear Usuario</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,41 +84,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                <div class="row">
-                    <div class="col-lg-1"></div>
-                    <div class="col-lg-10">
-                        <div class="card card-outline-info">
-                            
-                            <div class="card-body m-t-15">
-                            	<legend>Lista de Asistentes</legend>
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-borderer table-condensed">
-                                    	<thead>
-                                    		<tr>
-                                    			<th>#</th>
-                                    			<th>Nombre completo</th>
-                                    			<th>Rut</th>
-                                    			<th>Edad</th>
-                                    			<th>Teléfono</th>
-                                    			<th colspan="2">Opciones</th>
-                                    		</tr>
-                                    	</thead>
-                                    	<tbody id="cuerpo">
-                                    		<?php 
-                                    		if(isset($tabla_Asistentes)){
-                                    			echo $tabla_Asistentes;
-                                    		}?>
-                                    	</tbody>
-                                    	
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
 				
 			<script>
 				// Funcion para limitar el numero de caracteres de un textarea o input
@@ -138,6 +112,116 @@
 					return true;
 				}
 			</script>	
+			
+			<script>
+			// Funcion que se encarga de validar el rut, de acuerdo al calculo realizado con su parte entera y el digito verificador, del mismo modo, tambien // verifica que los ingresado sean numeros acordes al calculo del RUT, una vez pierda el focus del campo de texto.
+				function Valida_Rut(rut)
+				{
+					var tmpstr = "";
+					var intlargo = rut.value;
+					if (intlargo.length> 0)
+
+					{
+						crut = rut.value;
+						largo = crut.length;
+						if ( largo <2 )
+						{
+							alert('rut invÃ¡lido');
+							 $('#rut').val('');
+							return false;
+						}
+						for ( i=0; i <crut.length ; i++ )
+    						if ( crut.charAt(i) != ' ' && crut.charAt(i) != '.' && crut.charAt(i) != '-' )
+    						{
+    							tmpstr = tmpstr + crut.charAt(i);
+    						}
+    						rut = tmpstr;
+    						crut=tmpstr;
+    						largo = crut.length;
+
+						if ( largo> 2 )
+							rut = crut.substring(0, largo - 1);
+						else
+							rut = crut.charAt(0);
+						dv = crut.charAt(largo-1);
+
+						if ( rut == null || dv == null )
+						return 0;
+						var dvr = '0';
+						suma = 0;
+						mul  = 2;
+
+						for (i= rut.length-1 ; i>= 0; i--)
+						{
+							suma = suma + rut.charAt(i) * mul;
+							if (mul == 7)
+								mul = 2;
+							else
+								mul++;
+						}
+
+						res = suma % 11;
+						if (res==1)
+							dvr = 'k';
+						else if (res==0)
+							dvr = '0';
+						else
+						{
+							dvi = 11-res;
+							dvr = dvi + "";
+						}
+
+						if ( dvr != dv.toLowerCase() )
+						{
+							alert('El Rut Ingreso es Invalido!\nPor favor, ingresar numeros y digito verificador en la forma sugerida');
+							$('#rut').val('');
+							return false;
+						}
+						alert('El Rut Ingresado es Correcto!');
+						$('#rut').focus();
+						return true;
+					}
+				}
+
+		// Funcion que valida que el ingreso al campo sea de solo caracteres del tipo letras		
+        function soloLetras(e) {
+            key = e.keyCode || e.which;
+            tecla = String.fromCharCode(key).toLowerCase();
+            letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+            especiales = [8, 37, 39, 46];
+
+            tecla_especial = false
+            for(var i in especiales) {
+                if(key == especiales[i]) {
+                    tecla_especial = true;
+                    break; 
+                }
+            }
+
+            if(letras.indexOf(tecla) == -1 && !tecla_especial)
+                return false;
+        }
+
+        // Funcion que solo permite numeros dentro de los textfields especificados para usar la funcion
+		function soloRUT(e) {
+            key = e.keyCode || e.which;
+            tecla = String.fromCharCode(key).toLowerCase();
+            numeros = "0123456789-K";
+            especiales = [8, 37, 39, 46];
+
+            tecla_especial = false
+            for(var i in especiales) {
+                if(key == especiales[i]) {
+                    tecla_especial = true;
+                    break; 
+                }
+            }
+
+            if(numeros.indexOf(tecla) == -1 && !tecla_especial)
+                return false;
+        }
+			
+			</script>
 
 			<script src="<?php echo base_url('assets/js/lib/jquery/jquery.min.js');?>"></script>
             <script type="text/javascript">

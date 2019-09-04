@@ -112,7 +112,8 @@ if (!$this->session->userdata('usuario')) {
                                     <li><a href="<?php echo base_url('index.php/Dashboard/inbox'); ?>"><i class="ti-email"></i> Mensajes</a></li>
                                     <?php if($this->session->userdata('id_usuario')==1){ ?>
                                     <li><a href="<?php echo base_url('index.php/Dashboard/inboxMasivo'); ?>"><i class="ti-email"></i> Mensajes Masivos</a></li>
-                                    <?php } ?>  
+                                    <li><a href="<?php echo base_url('index.php/Dashboard/nuevoUsuario'); ?>"><i class="fa fa-users"></i> Ingresar Nuevo Usuario</a></li>
+									<?php } ?>  
                                     <li><a href="<?php echo base_url('index.php/Dashboard/logOut'); ?>"><i class="fa fa-power-off"></i> Salir</a></li>
                                 </ul>
                             </div>
