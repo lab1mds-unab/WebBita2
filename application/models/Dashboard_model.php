@@ -103,6 +103,12 @@ class Dashboard_model extends CI_Model {
 
 		return $query->result();
 	}
+	
+	public function M_obtenerPerfilesUsuario(){
+		$query = $this->db->get('t_perfil');
+
+		return $query->result();
+	}
 
 	public function M_obtenerUsuarios($id_user = 0){
 		$this->db->order_by('nombre_completo', 'ASC');
@@ -156,6 +162,23 @@ class Dashboard_model extends CI_Model {
 					);
 
 		$this->db->insert('historial_estado', $data);
+		return $this->db->affected_rows();
+	}
+	
+	public function M_IngresarUsuario($id_perfil,$nombre,$edad,$correo,$nom_usuario,$contraseña){
+		$data = array(
+					
+					'id_perfil' => $id_perfil,
+					'nombre_completo' => $nombre,
+					'edad' => $edad,
+					'correo' => $correo,
+					'usuario' => $nom_usuario,
+					'password' => password_hash($contraseña, PASSWORD_BCRYPT),			
+					
+					);
+
+		$this->db->insert('usuario', $data);
+		
 		return $this->db->affected_rows();
 	}
 

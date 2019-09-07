@@ -185,6 +185,7 @@ class Dashboard extends CI_Controller {
 		$data["mensajes"] = $this->checkMensajesNuevos()[0];
 		$data["mensajesNuevos"] = $this->checkMensajesNuevos()[1];
 		//$data["tabla_Asistentes"] = $this->C_obtenerAsistentes();
+		$data["select_perfiles"] = $this->C_obtenerPerfilesUsuario();
 		$this->load->view('template/header',$data);
 		$this->load->view('template/nuevoUsuario',$data);
 		$this->load->view('template/footer');
@@ -371,6 +372,16 @@ class Dashboard extends CI_Controller {
 		return $select_estados;
 
 	}
+	
+	public function C_obtenerPerfilesUsuario(){
+		$resp = $this->Dashboard_model->M_obtenerPerfilesUsuario();
+		$select_perfiles = "";
+		foreach ($resp as $fila) {
+			$select_perfiles .="<option value='".$fila->id_perfil."'>".$fila->descripcion."</option>";
+		}
+		return $select_perfiles;
+
+	}
 
 	public function C_actualizarEstado(){
 		// Itinerario e información se van a la tabla DELEGACIONES
@@ -393,6 +404,24 @@ class Dashboard extends CI_Controller {
 		}
 
 		$this->C_obtenerHistorialEstados(1);
+	}
+	
+	public function C_ingresarUsuario(){
+		
+		$id_perfil = $this->input->post("id_perfil");
+		$nombre = $this->input->post("nombre");
+		$edad = $this->input->post("edad");
+		$correo = $this->input->post("correo");
+		$nom_usuario = $this->input->post("nom_usuario");
+		$contraseña = $this->input->post("contraseña");
+
+		$ing_Usuario = $this->Dashboard_model->M_IngresarUsuario($id_perfil,$nombre,$edad,$correo,$nom_usuario,$contraseña);
+
+		if ($ing_Usuario == 0) {
+			//echo "Hubo un problema con la actualizacion de informacion";
+			
+		}
+
 	}
 
 	public function send_mail($mensaje,$lat,$long) {

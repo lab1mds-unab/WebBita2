@@ -25,8 +25,8 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Seleccionar perfil usuario</label>
                                             <div class="col-md-9">
-                                                <select id = "estados" name="estado" class="form-control">
-                                                    <?php echo $select_estados; ?>
+                                                <select id = "perfiles" name="perfil" class="form-control">
+                                                    <?php echo $select_perfiles; ?>
                                                 </select>
                                             </div>
                                         </div>
@@ -42,28 +42,28 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Edad</label>
                                             <div class="col-md-9">
-                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="Ingresar entre 0 y 99 años" required>
+                                                <input name="edad" id = "edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="Ingresar entre 0 y 99 años" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="control-label col-md-3">Correo</label>
                                             <div class="col-md-9">
-                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="example@example.com" required>
+                                                <input name="correo" id = "correo" type="text" class="form-control" placeholder="example@example.com" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="control-label col-md-3">Nombre Usuario</label>
                                             <div class="col-md-9">
-                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="Alias (Peterlanguilla)" required>
+                                                <input name="nom_usuario" id = "nom_usuario" type="text" class="form-control" placeholder="Alias (Peterlanguilla)" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="control-label col-md-3">Contraseña</label>
                                             <div class="col-md-9">
-                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="*************" required>
+                                                <input name="contraseña" id = "contraseña" type="text" class="form-control" placeholder="*************" required>
                                             </div>
                                         </div>
 										
@@ -73,7 +73,7 @@
                                             <div class="col-md-12">
                                                 <div class="row">
                                                     <div class="offset-sm-2 col-md-9">
-                                                        <button type="button" id="registrarAsistente" class="btn btn-primary"> <i class="fa fa-check"></i> Crear Usuario</button>
+                                                        <button type="button" id="registrarUsuario" class="btn btn-primary"> <i class="fa fa-check"></i> Crear Usuario</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -84,12 +84,49 @@
                         </div>
                     </div>
                 </div>
+			<script src="<?php echo base_url('assets/js/lib/jquery/jquery.min.js');?>"></script>	
+			<script type="text/javascript">
+			
+				$('.form-actions').on('click','#registrarUsuario',function(){
+                    
+					// inicio AJAX
+		            $.ajax({
+		                url: "<?php echo base_url('index.php/Dashboard/C_ingresarUsuario/'); ?>",
+		                type: "post",
+		                data: { 
+								id_perfil: $("#perfiles").val(),
+								nombre:$("#nombre").val(),
+                                edad: $("#edad").val(),
+								correo: $("#correo").val(),
+								nom_usuario: $("#nom_usuario").val(),
+								contraseña: $("#contraseña").val()
+                                },
+		                beforeSend:function(){
+		                    $("#cuerpo").html('<div class="row">\
+											    <div class="col-lg-1"></div>\
+											    <div class="col-lg-10">\
+											        <div class="card card-outline-info"><div class="card-body m-t-15">\
+											                <center><i class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i></center>\
+											            </div>\
+											        </div>\
+											    </div>\
+											</div>');
+		                    
+		                },success:function(data){
+		                    /*$("#cuerpo").html("Usuario Creado con Exito");
+		                    $("#cuerpo").append($(data));*/
+							alert("ok");
+
+		                  }
+		             });
+		            // fin ajax 
+				});
 				
-			<script>
-				// Funcion para limitar el numero de caracteres de un textarea o input
-				// Tiene que recibir el evento, valor y número máximo de caracteres
-				function limitar(e, contenido, caracteres)
-				{
+				$(document).ready(function(){
+		        	
+		        });
+				
+			function limitar(e, contenido, caracteres){
 					// obtenemos la tecla pulsada
 					var unicode=e.keyCode? e.keyCode : e.charCode;
  
@@ -111,12 +148,8 @@
  
 					return true;
 				}
-			</script>	
-			
-			<script>
-			// Funcion que se encarga de validar el rut, de acuerdo al calculo realizado con su parte entera y el digito verificador, del mismo modo, tambien // verifica que los ingresado sean numeros acordes al calculo del RUT, una vez pierda el focus del campo de texto.
-				function Valida_Rut(rut)
-				{
+				
+			function Valida_Rut(rut){
 					var tmpstr = "";
 					var intlargo = rut.value;
 					if (intlargo.length> 0)
@@ -182,27 +215,25 @@
 						return true;
 					}
 				}
+				
+			function soloLetras(e) {
+				key = e.keyCode || e.which;
+				tecla = String.fromCharCode(key).toLowerCase();
+				letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
+				especiales = [8, 37, 39, 46];
 
-		// Funcion que valida que el ingreso al campo sea de solo caracteres del tipo letras		
-        function soloLetras(e) {
-            key = e.keyCode || e.which;
-            tecla = String.fromCharCode(key).toLowerCase();
-            letras = " áéíóúabcdefghijklmnñopqrstuvwxyz";
-            especiales = [8, 37, 39, 46];
+				tecla_especial = false
+				for(var i in especiales) {
+					if(key == especiales[i]) {
+						tecla_especial = true;
+						break; 
+					}
+				}
 
-            tecla_especial = false
-            for(var i in especiales) {
-                if(key == especiales[i]) {
-                    tecla_especial = true;
-                    break; 
-                }
-            }
-
-            if(letras.indexOf(tecla) == -1 && !tecla_especial)
-                return false;
-        }
-
-        // Funcion que solo permite numeros dentro de los textfields especificados para usar la funcion
+				if(letras.indexOf(tecla) == -1 && !tecla_especial)
+					return false;
+			}
+			
 		function soloRUT(e) {
             key = e.keyCode || e.which;
             tecla = String.fromCharCode(key).toLowerCase();
@@ -220,91 +251,6 @@
             if(numeros.indexOf(tecla) == -1 && !tecla_especial)
                 return false;
         }
-			
+				
 			</script>
-
-			<script src="<?php echo base_url('assets/js/lib/jquery/jquery.min.js');?>"></script>
-            <script type="text/javascript">
-
-
-				$('#registrarAsistente').on('click',function(){
-
-					var Nombre   = $("input[name='nombreCompleto']").val();
-					var Rut      = $("input[name='rut']").val();
-					var Edad     = $("input[name='edad']").val();
-					var Club     = $("input[name='club']").val();
-					var Telefono = $("input[name='fono']").val();
-
-
-					// inicio AJAX
-		            $.ajax({
-		                url: "<?php echo base_url('index.php/Dashboard/C_guardarAsistente/'); ?>",
-		                type: "post",
-		                data: { nombre:Nombre
-		                	   ,rut:Rut
-		                	   ,edad:Edad
-		                	   ,club:Club
-		                	   ,telefono:Telefono},
-		                beforeSend:function(){
-		                    $("#cuerpo").html('<div class="row">\
-											    <div class="col-lg-1"></div>\
-											    <div class="col-lg-10">\
-											        <div class="card card-outline-info"><div class="card-body m-t-15">\
-											                <center><i class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i></center>\
-											            </div>\
-											        </div>\
-											    </div>\
-											</div>');
-		                    
-		                },success:function(data){
-		                     $("#cuerpo").html(data);
-		                     $("input[name='nombreCompleto']").val("");
-							 $("input[name='rut']").val("");
-							 $("input[name='edad']").val("");
-							 $("input[name='club']").val("");
-							 $("input[name='fono']").val("");
-
-		                  }
-		             });
-		            // fin ajax 
-					
-					
-				});
-
-				$('#cuerpo').on('click','.b_borrar',function(){
-					// inicio AJAX
-		            $.ajax({
-		                url: "<?php echo base_url('index.php/Dashboard/C_borrarAsistente/'); ?>",
-		                type: "post",
-		                data: { id_asistente:$(this).val()},
-		                beforeSend:function(){
-		                    $("#cuerpo").html('<div class="row">\
-											    <div class="col-lg-1"></div>\
-											    <div class="col-lg-10">\
-											        <div class="card card-outline-info"><div class="card-body m-t-15">\
-											                <center><i class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i></center>\
-											            </div>\
-											        </div>\
-											    </div>\
-											</div>');
-		                    
-		                },success:function(data){
-		                    $("#cuerpo").html("");
-		                    $("#cuerpo").append($(data));
-
-		                  }
-		             });
-		            // fin ajax 
-				});
-
-
-		      
-		        $(document).ready(function(){
-		        	
-		        });
-		        // Obtención de coordenadas
-		     
-				
-				
-    </script>
           
