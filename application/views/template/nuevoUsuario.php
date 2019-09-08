@@ -42,28 +42,28 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Edad</label>
                                             <div class="col-md-9">
-                                                <input name="edad" id = "edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="Ingresar entre 0 y 99 años" required>
+                                                <input name="edad" id = "edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return false" placeholder="Ingresar entre 0 y 99 años" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="control-label col-md-3">Correo</label>
                                             <div class="col-md-9">
-                                                <input name="correo" id = "correo" type="text" class="form-control" placeholder="example@example.com" required>
+                                                <input name="correo" id = "correo" type="text" class="form-control" placeholder="example@example.com" onchange="return validaEmail(this)" tabindex="0" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="control-label col-md-3">Nombre Usuario</label>
                                             <div class="col-md-9">
-                                                <input name="nom_usuario" id = "nom_usuario" type="text" class="form-control" placeholder="Alias (Peterlanguilla)" required>
+                                                <input name="nom_usuario" maxlength=20 id = "nom_usuario" type="text" class="form-control" placeholder="Alias (Psgonzalez)" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="control-label col-md-3">Contraseña</label>
                                             <div class="col-md-9">
-                                                <input name="contraseña" id = "contraseña" type="text" class="form-control" placeholder="*************" required>
+                                                <input name="contraseña" maxlength=20 id = "contraseña" type="text" class="form-control" placeholder="*************" required>
                                             </div>
                                         </div>
 										
@@ -113,16 +113,53 @@
 											</div>');
 		                    
 		                },success:function(data){
-		                    /*$("#cuerpo").html("Usuario Creado con Exito");
-		                    $("#cuerpo").append($(data));*/
-							alert("ok");
-
+							//alert(data);
+							if(data == "0"){
+								alert("Usuario creado con exito");
+								this.reload();
+							}
+							else if(data == "1"){
+								alert("Hubo un problema con la actualizacion de informacion");
+							}
+							else if(data == "2"){
+								alert("Correo invalido o falta informacion!");
+							}
 		                  }
 		             });
 		            // fin ajax 
 				});
 				
+				/*
+				$('#cuerpo').on('click','.b_borrar',function(){
+					// inicio AJAX
+		            $.ajax({
+		                url: "<?php echo base_url('index.php/Dashboard/C_borrarUsuario/'); ?>",
+		                type: "post",
+		                data: { id_usuario:$(this).val()},
+		                beforeSend:function(){
+		                    $("#cuerpo").html('<div class="row">\
+											    <div class="col-lg-1"></div>\
+											    <div class="col-lg-10">\
+											        <div class="card card-outline-info"><div class="card-body m-t-15">\
+											                <center><i class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i></center>\
+											            </div>\
+											        </div>\
+											    </div>\
+											</div>');
+		                    
+		                },success:function(data){
+		                    $("#cuerpo").html("");
+		                    $("#cuerpo").append($(data));
+
+		                  }
+		             });
+		            // fin ajax 
+				});
+				*/
+				
 				$(document).ready(function(){
+					
+		
 		        	
 		        });
 				
@@ -149,72 +186,21 @@
 					return true;
 				}
 				
-			function Valida_Rut(rut){
-					var tmpstr = "";
-					var intlargo = rut.value;
-					if (intlargo.length> 0)
-
-					{
-						crut = rut.value;
-						largo = crut.length;
-						if ( largo <2 )
-						{
-							alert('rut invÃ¡lido');
-							 $('#rut').val('');
-							return false;
-						}
-						for ( i=0; i <crut.length ; i++ )
-    						if ( crut.charAt(i) != ' ' && crut.charAt(i) != '.' && crut.charAt(i) != '-' )
-    						{
-    							tmpstr = tmpstr + crut.charAt(i);
-    						}
-    						rut = tmpstr;
-    						crut=tmpstr;
-    						largo = crut.length;
-
-						if ( largo> 2 )
-							rut = crut.substring(0, largo - 1);
-						else
-							rut = crut.charAt(0);
-						dv = crut.charAt(largo-1);
-
-						if ( rut == null || dv == null )
-						return 0;
-						var dvr = '0';
-						suma = 0;
-						mul  = 2;
-
-						for (i= rut.length-1 ; i>= 0; i--)
-						{
-							suma = suma + rut.charAt(i) * mul;
-							if (mul == 7)
-								mul = 2;
-							else
-								mul++;
-						}
-
-						res = suma % 11;
-						if (res==1)
-							dvr = 'k';
-						else if (res==0)
-							dvr = '0';
-						else
-						{
-							dvi = 11-res;
-							dvr = dvi + "";
-						}
-
-						if ( dvr != dv.toLowerCase() )
-						{
-							alert('El Rut Ingreso es Invalido!\nPor favor, ingresar numeros y digito verificador en la forma sugerida');
-							$('#rut').val('');
-							return false;
-						}
-						alert('El Rut Ingresado es Correcto!');
-						$('#rut').focus();
-						return true;
-					}
+			// funcion que valida formato ingresado de mail en base a regexp
+			function validaEmail(correo) {
+			var formato = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+			
+			
+			if(correo.value.match(formato)){
+				return true;
+				}else{
+					
+				document.getElementById("correo").focus();
+				alert("Has ingresado un email incorrecto!\nPor favor, ingresa un email valido");
+				//document.form1.correo.focus();
+				return false;
 				}
+			}
 				
 			function soloLetras(e) {
 				key = e.keyCode || e.which;
@@ -253,4 +239,5 @@
         }
 				
 			</script>
-          
+			
+			

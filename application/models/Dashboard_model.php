@@ -109,23 +109,27 @@ class Dashboard_model extends CI_Model {
 
 		return $query->result();
 	}
-
-	public function M_obtenerUsuarios($id_user = 0){
+	
+	//funcion futura de conexion y query a BDD para sacar usuarios
+	/*	
+	public function M_obtenerUsuarios(){
 		$this->db->order_by('nombre_completo', 'ASC');
-		if ($id_user != 0) {
-			$this->db->where("id_usuario =",$id_user);
-			$query = $this->db->get('usuario');
-			return $query->row();
-		}
-		$query = $this->db->get('usuario');
-		return $query->result();
+			$query = $this->db->get_where('usuario', array('id_usuario' => $this->session->userdata('id_usuario')));
+			return $query->result();
 	}
-
+*/
 	public function M_borrarAsistente($id_asistente){
 		$this->db->delete('asistentes', array('id_asistente' => $id_asistente));
 		return $this->db->affected_rows();
 	}
-
+	
+	// funcion futura de eliminado de usuarios
+	/*
+	public function M_borrarUsuario($id_asistente){
+		$this->db->delete('usuario', array('id_usuario' => $id_usuario));
+		return $this->db->affected_rows();
+	}
+	*/
 	public function M_ActualizarInfoDelegacion($itinerario,$infoExtra){
 		
 

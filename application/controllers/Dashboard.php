@@ -184,7 +184,6 @@ class Dashboard extends CI_Controller {
     public function nuevoUsuario(){
 		$data["mensajes"] = $this->checkMensajesNuevos()[0];
 		$data["mensajesNuevos"] = $this->checkMensajesNuevos()[1];
-		//$data["tabla_Asistentes"] = $this->C_obtenerAsistentes();
 		$data["select_perfiles"] = $this->C_obtenerPerfilesUsuario();
 		$this->load->view('template/header',$data);
 		$this->load->view('template/nuevoUsuario',$data);
@@ -408,21 +407,52 @@ class Dashboard extends CI_Controller {
 	
 	public function C_ingresarUsuario(){
 		
+		// funcion que limpia el parametro de mail y valida ante caracteres especiales, luego devuelve variable limpia para validar y filtrar email.
+		function test_input($data) {
+		$data = trim($data);
+		$data = stripslashes($data);
+		$data = htmlspecialchars($data);
+		return $data;
+		}
+		// se reciben datos desde el formulario
 		$id_perfil = $this->input->post("id_perfil");
 		$nombre = $this->input->post("nombre");
 		$edad = $this->input->post("edad");
 		$correo = $this->input->post("correo");
 		$nom_usuario = $this->input->post("nom_usuario");
 		$contraseña = $this->input->post("contraseña");
+		
 
-		$ing_Usuario = $this->Dashboard_model->M_IngresarUsuario($id_perfil,$nombre,$edad,$correo,$nom_usuario,$contraseña);
-
+		$email = test_input($correo);
+		// validacion usando funciones de PHP para verificar mail.
+			if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				
+			  $ing_Usuario = $this->Dashboard_model->M_IngresarUsuario($id_perfil,$nombre,$edad,$correo,$nom_usuario,$contraseña);
+			  
+			  //caso de error en actualizar info a la BDD o posible error en php
+			  //echo ($ing_Usuario);
+			  		if ($ing_Usuario == 0) {
+						echo("1");
+						exit();
+					}
+					else  //Caso exitoso de ingreso de usuario 
+					{ 
+						echo("0");
+						exit();
+					}
+			} else // caso de que el email ingresado sea erroneo, por ende no permitiria ingreso a la BDD de los datos. 
+			{  
+			  echo("2");
+			  exit();
+			  
+			}
+			
 		if ($ing_Usuario == 0) {
 			//echo "Hubo un problema con la actualizacion de informacion";
-			
 		}
 
 	}
+	
 
 	public function send_mail($mensaje,$lat,$long) {
 		// Obtener correos de externos
@@ -481,9 +511,6 @@ public function C_obtenerHistorialEstados($output = 0){
 
 	}
 
-
-
-
 	public function C_obtenerAsistentes($output = 0){
 		$resp = $this->Dashboard_model->M_obtenerAsistentes();
 		$tabla_Asistentes = "";
@@ -513,6 +540,40 @@ public function C_obtenerHistorialEstados($output = 0){
 
 
 	}
+	
+	// funcion futura de creacion de dashboard con data de usuarios ingresados.
+	/*
+	public function C_obtenerUsuarios($output = 0){
+		$resp = $this->Dashboard_model->M_obtenerUsuarios();
+		$tabla_Usuario = "";
+		$contador= 1;
+		foreach ($resp as $fila) {
+			$tabla_Usuario .= "<tr>
+								  	<td>".$contador++."</td>
+									<td>".$fila->nombre_completo."</td>
+	                    			<td>".$fila->edad."</td>
+	                    			<td>".$fila->correo."</td>
+	                    			<td>".$fila->usuario."</td
+									<td>".$fila->password."</td>
+	                    			<td>
+										
+	                    				<!-- <button type='button' class='btn btn-warning btn-flat btn-addon b_editar'><i class='ti-user'></i>Editar</button> -->
+	                    			</td>
+	                    			<td>
+	                    				
+	                    				<button type='button' value='".$fila->id_usuario."' class='btn btn-danger btn-flat btn-addon b_borrar'><i class='fa fa-times' aria-hidden='true'></i>Borrar</button>
+	                    			</td>
+								  </tr>";
+		}
+		if ($output == 1){
+			echo $tabla_Usuario;
+		}else{
+			return $tabla_Usuario;
+		}
+
+
+	}
+	*/
 
 	public function C_guardarHito(){
 
@@ -574,6 +635,18 @@ public function C_obtenerHistorialEstados($output = 0){
 			echo $this->C_obtenerAsistentes(1);
 		}
 	}
+	
+	// funcion futura de eliminado de mensajes.
+	/*
+	public function C_borrarUsuario(){
+		$resp = $this->Dashboard_model->M_borrarUsuario($this->input->post("id_usuario"));
+		if($resp == 0){
+			echo "ERROR";
+		}else{
+			echo $this->C_obtenerUsuarios(1);
+		}
+	}
+	*/
 	
 	public function validaRut($rut){
 	    if(strpos($rut,"-") == false){
