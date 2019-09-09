@@ -25,8 +25,9 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Seleccionar perfil usuario</label>
                                             <div class="col-md-9">
-                                                <select id = "perfiles" name="perfil" class="form-control">
-                                                    <?php echo $select_perfiles; ?>
+                                                <select name = "perfiles" class="form-control"> 
+                                                <option value="1">Administrador</option>
+												<option value="2">Viajero</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -35,21 +36,21 @@
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Nombre Completo</label>
                                             <div class="col-md-9">
-                                                <input name="nombreCompleto" type="text" maxlength=50 id="nombre" class="form-control" placeholder="Nombre completo (Pedro Soto González)" required onkeypress="return soloLetras(event)">
+                                                <input name="nombrecompleto" type="text" maxlength=50 id="nombrecompleto" class="form-control" placeholder="Nombre completo (Pedro Soto González)" required onkeypress="return soloLetras(event)">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="control-label col-md-3">Edad</label>
                                             <div class="col-md-9">
-                                                <input name="edad" id = "edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return false" placeholder="Ingresar entre 0 y 99 años" required>
+                                                <input name="edad" type="number" class="form-control" onKeyUp="return limitar(event,this.value,2)" onKeyDown="return limitar(event,this.value,2)" placeholder="Ingresar entre 0 y 99 años" required>
                                             </div>
                                         </div>
 										
 										<div class="form-group row">
                                             <label class="control-label col-md-3">Correo</label>
                                             <div class="col-md-9">
-                                                <input name="correo" id = "correo" type="text" class="form-control" placeholder="example@example.com" onchange="return validaEmail(this)" tabindex="0" required>
+                                                <input name="correo" id = "correo" type="email" class="form-control" placeholder="example@example.com" onchange="return validaEmail(this)" tabindex="0" required>
                                             </div>
                                         </div>
 										
@@ -63,7 +64,7 @@
 										<div class="form-group row">
                                             <label class="control-label col-md-3">Contraseña</label>
                                             <div class="col-md-9">
-                                                <input name="contraseña" maxlength=20 id = "contraseña" type="text" class="form-control" placeholder="*************" required>
+                                                <input name="contrasena" maxlength=20 id = "contrasena" type="password" class="form-control" placeholder="*************" required>
                                             </div>
                                         </div>
 										
@@ -84,86 +85,43 @@
                         </div>
                     </div>
                 </div>
-			<script src="<?php echo base_url('assets/js/lib/jquery/jquery.min.js');?>"></script>	
-			<script type="text/javascript">
-			
-				$('.form-actions').on('click','#registrarUsuario',function(){
-                    
-					// inicio AJAX
-		            $.ajax({
-		                url: "<?php echo base_url('index.php/Dashboard/C_ingresarUsuario/'); ?>",
-		                type: "post",
-		                data: { 
-								id_perfil: $("#perfiles").val(),
-								nombre:$("#nombre").val(),
-                                edad: $("#edad").val(),
-								correo: $("#correo").val(),
-								nom_usuario: $("#nom_usuario").val(),
-								contraseña: $("#contraseña").val()
-                                },
-		                beforeSend:function(){
-		                    $("#cuerpo").html('<div class="row">\
-											    <div class="col-lg-1"></div>\
-											    <div class="col-lg-10">\
-											        <div class="card card-outline-info"><div class="card-body m-t-15">\
-											                <center><i class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i></center>\
-											            </div>\
-											        </div>\
-											    </div>\
-											</div>');
-		                    
-		                },success:function(data){
-							//alert(data);
-							if(data == "0"){
-								alert("Usuario creado con exito");
-								this.reload();
-							}
-							else if(data == "1"){
-								alert("Hubo un problema con la actualizacion de informacion");
-							}
-							else if(data == "2"){
-								alert("Correo invalido o falta informacion!");
-							}
-		                  }
-		             });
-		            // fin ajax 
-				});
 				
-				/*
-				$('#cuerpo').on('click','.b_borrar',function(){
-					// inicio AJAX
-		            $.ajax({
-		                url: "<?php echo base_url('index.php/Dashboard/C_borrarUsuario/'); ?>",
-		                type: "post",
-		                data: { id_usuario:$(this).val()},
-		                beforeSend:function(){
-		                    $("#cuerpo").html('<div class="row">\
-											    <div class="col-lg-1"></div>\
-											    <div class="col-lg-10">\
-											        <div class="card card-outline-info"><div class="card-body m-t-15">\
-											                <center><i class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i></center>\
-											            </div>\
-											        </div>\
-											    </div>\
-											</div>');
-		                    
-		                },success:function(data){
-		                    $("#cuerpo").html("");
-		                    $("#cuerpo").append($(data));
-
-		                  }
-		             });
-		            // fin ajax 
-				});
-				*/
+				<div class="row">
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-10">
+                        <div class="card card-outline-info">
+                            
+                            <div class="card-body m-t-15">
+                            	<legend>Lista de Usuarios</legend>
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-borderer table-condensed">
+                                    	<thead>
+                                    		<tr>
+                                    			<th>#</th>
+                                    			<th>Nombre completo</th>
+                                    			<th>Edad</th>
+                                    			<th>Correo</th>
+                                    			<th>Usuario</th>
+                                    			<th colspan="2">Opciones</th>
+                                    		</tr>
+                                    	</thead>
+                                    	<tbody id="cuerpo">
+                                    		<?php 
+                                    		if(isset($tabla_Usuario)){
+                                    			echo $tabla_Usuario;
+                                    		}?>
+                                    	</tbody>
+                                    	
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 				
-				$(document).ready(function(){
-					
-		
-		        	
-		        });
 				
-			function limitar(e, contenido, caracteres){
+				<script>
+				    function limitar(e, contenido, caracteres){
 					// obtenemos la tecla pulsada
 					var unicode=e.keyCode? e.keyCode : e.charCode;
  
@@ -186,21 +144,21 @@
 					return true;
 				}
 				
-			// funcion que valida formato ingresado de mail en base a regexp
-			function validaEmail(correo) {
-			var formato = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+		    	// funcion que valida formato ingresado de mail en base a regexp
+			   function validaEmail(correo) {
+			   var formato = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 			
 			
-			if(correo.value.match(formato)){
-				return true;
-				}else{
+			   if(correo.value.match(formato)){
+				  return true;
+			   }else{
 					
 				document.getElementById("correo").focus();
 				alert("Has ingresado un email incorrecto!\nPor favor, ingresa un email valido");
 				//document.form1.correo.focus();
 				return false;
-				}
-			}
+				  }
+			   }
 				
 			function soloLetras(e) {
 				key = e.keyCode || e.which;
@@ -237,6 +195,91 @@
             if(numeros.indexOf(tecla) == -1 && !tecla_especial)
                 return false;
         }
+		
+		</script>
+		
+			<script src="<?php echo base_url('assets/js/lib/jquery/jquery.min.js');?>"></script>	
+			<script type="text/javascript">
+			
+				$('#registrarUsuario').on('click',function(){
+					
+					var Perfil   = $("select[name='perfiles']").val();
+					var Nombre   = $("input[name='nombrecompleto']").val();
+					var Edad     = $("input[name='edad']").val();
+					var Correo   = $("input[name='correo']").val();
+				    var usuario = $("input[name='nom_usuario']").val();
+					var contrasena = $("input[name='contrasena']").val();
+								
+					// inicio AJAX
+		            $.ajax({
+		                url: "<?php echo base_url('index.php/Dashboard/C_ingresarUsuario/'); ?>",
+		                type: "post",
+		                data: { id_perfil:Perfil,
+								nombre:Nombre,
+                                edad:Edad,
+								correo:Correo,
+								nom_usuario:usuario,
+								contrasena:contrasena},
+								
+		                beforeSend:function(){
+		                    $("#cuerpo").html('<div class="row">\
+											    <div class="col-lg-1"></div>\
+											    <div class="col-lg-10">\
+											        <div class="card card-outline-info"><div class="card-body m-t-15">\
+											                <center><i class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i></center>\
+											            </div>\
+											        </div>\
+											    </div>\
+											</div>');
+		                    
+		                },success:function(data){
+							
+							 $("#cuerpo").html(data);
+							 $("select[name='perfiles']").val('--Seleccione un tipo de usuario--');
+		                     $("input[name='nombrecompleto']").val("");
+							 $("input[name='edad']").val("");
+							 $("input[name='correo']").val("");
+							 $("input[name='nom_usuario']").val("");
+							 $("input[name='contrasena']").val("");
+		                  }
+		             });
+		            // fin ajax 
+				});
+				
+				$('#cuerpo').on('click','.b_borrar',function(){
+					// inicio AJAX
+		            $.ajax({
+		                url: "<?php echo base_url('index.php/Dashboard/C_borrarUsuario/'); ?>",
+		                type: "post",
+		                data: { id_usuario:$(this).val()},
+		                beforeSend:function(){
+		                    $("#cuerpo").html('<div class="row">\
+											    <div class="col-lg-1"></div>\
+											    <div class="col-lg-10">\
+											        <div class="card card-outline-info"><div class="card-body m-t-15">\
+											                <center><i class="fa fa-spinner fa-pulse fa-3x fa-fw" aria-hidden="true"></i></center>\
+											            </div>\
+											        </div>\
+											    </div>\
+											</div>');
+		                    
+		                },success:function(data){
+		                    $("#cuerpo").html("");
+		                    $("#cuerpo").append($(data));
+
+		                  }
+		             });
+		            // fin ajax 
+				});
+				
+				
+				$(document).ready(function(){
+					
+		
+		        	
+		        });
+				
+			
 				
 			</script>
 			

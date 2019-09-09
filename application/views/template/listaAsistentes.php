@@ -200,12 +200,15 @@
 						if ( dvr != dv.toLowerCase() )
 						{
 							alert('El Rut Ingreso es Invalido!\nPor favor, ingresar numeros y digito verificador en la forma sugerida');
+							alert.close();
 							$('#rut').val('');
 							return false;
-						}
-						alert('El Rut Ingresado es Correcto!');
-						$('#rut').focus();
-						return true;
+					    } else {
+						     alert('El Rut Ingresado es Correcto!');
+						     alert.close();
+						     $('#rut').focus();
+						     return true;
+						}	 
 					}
 				}
 

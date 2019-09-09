@@ -25,6 +25,13 @@ class Dashboard_model extends CI_Model {
 		return $this->db->affected_rows();
 	}
 
+	public function M_IngresarUsuario($datos){
+		
+		$this->db->insert('usuario', $datos);
+		return $this->db->affected_rows();
+	}
+
+
 	public function M_obtenerHitos($id_delegacion = 0){
 		$this->db->order_by('fecha', 'DESC');
 		$this->db->join('delegaciones d', 'd.id_delegacion = h.id_delegacion');
@@ -109,27 +116,24 @@ class Dashboard_model extends CI_Model {
 
 		return $query->result();
 	}
-	
-	//funcion futura de conexion y query a BDD para sacar usuarios
-	/*	
+		
 	public function M_obtenerUsuarios(){
 		$this->db->order_by('nombre_completo', 'ASC');
-			$query = $this->db->get_where('usuario', array('id_usuario' => $this->session->userdata('id_usuario')));
-			return $query->result();
+		$query = $this->db->get('usuario');
+		
+		return $query->result();
 	}
-*/
+
 	public function M_borrarAsistente($id_asistente){
 		$this->db->delete('asistentes', array('id_asistente' => $id_asistente));
 		return $this->db->affected_rows();
 	}
 	
-	// funcion futura de eliminado de usuarios
-	/*
-	public function M_borrarUsuario($id_asistente){
+	public function M_borrarUsuario($id_usuario){
 		$this->db->delete('usuario', array('id_usuario' => $id_usuario));
 		return $this->db->affected_rows();
 	}
-	*/
+	
 	public function M_ActualizarInfoDelegacion($itinerario,$infoExtra){
 		
 
@@ -166,23 +170,6 @@ class Dashboard_model extends CI_Model {
 					);
 
 		$this->db->insert('historial_estado', $data);
-		return $this->db->affected_rows();
-	}
-	
-	public function M_IngresarUsuario($id_perfil,$nombre,$edad,$correo,$nom_usuario,$contraseña){
-		$data = array(
-					
-					'id_perfil' => $id_perfil,
-					'nombre_completo' => $nombre,
-					'edad' => $edad,
-					'correo' => $correo,
-					'usuario' => $nom_usuario,
-					'password' => password_hash($contraseña, PASSWORD_BCRYPT),			
-					
-					);
-
-		$this->db->insert('usuario', $data);
-		
 		return $this->db->affected_rows();
 	}
 

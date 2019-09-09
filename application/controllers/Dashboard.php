@@ -185,6 +185,7 @@ class Dashboard extends CI_Controller {
 		$data["mensajes"] = $this->checkMensajesNuevos()[0];
 		$data["mensajesNuevos"] = $this->checkMensajesNuevos()[1];
 		$data["select_perfiles"] = $this->C_obtenerPerfilesUsuario();
+		$data["tabla_Usuario"] = $this->C_obtenerUsuarios();
 		$this->load->view('template/header',$data);
 		$this->load->view('template/nuevoUsuario',$data);
 		$this->load->view('template/footer');
@@ -359,7 +360,49 @@ class Dashboard extends CI_Controller {
 		}
 	}
 
+	public function C_ingresarUsuario(){
+		
+		// se reciben datos desde el formulario
+		$datos = array('id_perfil'=>$this->input->post('id_perfil'),
+		                      'nombre_completo'=>$this->input->post('nombre'),
+							  'edad'=> $this->input->post('edad'),
+		                      'correo'=> $this->input->post('correo'),
+		                      'usuario'=> $this->input->post('nom_usuario'),
+		                      'password'=> $this->input->post('contrasena'));
+		
+        $resp = $this->Dashboard_model->M_IngresarUsuario($datos);
+		
+		echo $this->C_obtenerUsuarios(1);
+		/*$email = test_input($correo);
+		// validacion usando funciones de PHP para verificar mail.
+			//if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
 
+			  //caso de error en actualizar info a la BDD o posible error en php
+			  //echo ($ing_Usuario);
+			  //		if ($resp == 0) {
+				//		echo("1");
+					//	exit();
+			//		}
+				//	else  //Caso exitoso de ingreso de usuario 
+					//{ 
+				//		echo("0");
+						exit();
+					}
+			} else // caso de que el email ingresado sea erroneo, por ende no permitiria ingreso a la BDD de los datos. 
+			{  
+			  echo("2");
+			  exit();
+			  
+			}
+			
+		if ($resp == 0) {
+			//echo "Hubo un problema con la actualizacion de informacion";
+		}
+        
+        
+	    */
+
+	}
 
 
 	public function C_obtenerEstadosViaje(){
@@ -403,54 +446,6 @@ class Dashboard extends CI_Controller {
 		}
 
 		$this->C_obtenerHistorialEstados(1);
-	}
-	
-	public function C_ingresarUsuario(){
-		
-		// funcion que limpia el parametro de mail y valida ante caracteres especiales, luego devuelve variable limpia para validar y filtrar email.
-		function test_input($data) {
-		$data = trim($data);
-		$data = stripslashes($data);
-		$data = htmlspecialchars($data);
-		return $data;
-		}
-		// se reciben datos desde el formulario
-		$id_perfil = $this->input->post("id_perfil");
-		$nombre = $this->input->post("nombre");
-		$edad = $this->input->post("edad");
-		$correo = $this->input->post("correo");
-		$nom_usuario = $this->input->post("nom_usuario");
-		$contraseña = $this->input->post("contraseña");
-		
-
-		$email = test_input($correo);
-		// validacion usando funciones de PHP para verificar mail.
-			if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				
-			  $ing_Usuario = $this->Dashboard_model->M_IngresarUsuario($id_perfil,$nombre,$edad,$correo,$nom_usuario,$contraseña);
-			  
-			  //caso de error en actualizar info a la BDD o posible error en php
-			  //echo ($ing_Usuario);
-			  		if ($ing_Usuario == 0) {
-						echo("1");
-						exit();
-					}
-					else  //Caso exitoso de ingreso de usuario 
-					{ 
-						echo("0");
-						exit();
-					}
-			} else // caso de que el email ingresado sea erroneo, por ende no permitiria ingreso a la BDD de los datos. 
-			{  
-			  echo("2");
-			  exit();
-			  
-			}
-			
-		if ($ing_Usuario == 0) {
-			//echo "Hubo un problema con la actualizacion de informacion";
-		}
-
 	}
 	
 
@@ -517,7 +512,7 @@ public function C_obtenerHistorialEstados($output = 0){
 		$contador= 1;
 		foreach ($resp as $fila) {
 			$tabla_Asistentes .= "<tr>
-								  	<td>".$contador++."</td>
+								  	<td>".($contador++)."</td>
 	                    			<td>".$fila->nombre_completo."</td>
 	                    			<td>".$fila->rut."</td>
 	                    			<td>".$fila->edad."</td>
@@ -542,19 +537,18 @@ public function C_obtenerHistorialEstados($output = 0){
 	}
 	
 	// funcion futura de creacion de dashboard con data de usuarios ingresados.
-	/*
+	
 	public function C_obtenerUsuarios($output = 0){
 		$resp = $this->Dashboard_model->M_obtenerUsuarios();
 		$tabla_Usuario = "";
-		$contador= 1;
+		$conta= 1;
 		foreach ($resp as $fila) {
 			$tabla_Usuario .= "<tr>
-								  	<td>".$contador++."</td>
+								  	<td>".($conta++)."</td>
 									<td>".$fila->nombre_completo."</td>
 	                    			<td>".$fila->edad."</td>
 	                    			<td>".$fila->correo."</td>
 	                    			<td>".$fila->usuario."</td
-									<td>".$fila->password."</td>
 	                    			<td>
 										
 	                    				<!-- <button type='button' class='btn btn-warning btn-flat btn-addon b_editar'><i class='ti-user'></i>Editar</button> -->
@@ -573,7 +567,7 @@ public function C_obtenerHistorialEstados($output = 0){
 
 
 	}
-	*/
+
 
 	public function C_guardarHito(){
 
@@ -636,8 +630,7 @@ public function C_obtenerHistorialEstados($output = 0){
 		}
 	}
 	
-	// funcion futura de eliminado de mensajes.
-	/*
+	
 	public function C_borrarUsuario(){
 		$resp = $this->Dashboard_model->M_borrarUsuario($this->input->post("id_usuario"));
 		if($resp == 0){
@@ -646,7 +639,7 @@ public function C_obtenerHistorialEstados($output = 0){
 			echo $this->C_obtenerUsuarios(1);
 		}
 	}
-	*/
+	
 	
 	public function validaRut($rut){
 	    if(strpos($rut,"-") == false){
